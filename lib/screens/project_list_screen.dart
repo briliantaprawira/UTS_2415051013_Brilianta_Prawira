@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/project_provider.dart';
 import 'add_project_screen.dart';
+import 'edit_project_screen.dart'; // Import halaman edit
 
 class ProjectListScreen extends StatelessWidget {
   const ProjectListScreen({super.key});
@@ -53,9 +54,46 @@ class ProjectListScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text(project.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text('${project.concept} • Prioritas: ${project.priority}'),
-                  trailing: Chip(
-                    label: Text(project.status, style: const TextStyle(fontSize: 12)),
-                    backgroundColor: Colors.deepPurple.withOpacity(0.2),
+                  // Bagian trailing dengan tombol Edit, Delete, dan Status
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Chip(
+                        label: Text(project.status, style: const TextStyle(fontSize: 12)),
+                        backgroundColor: Colors.deepPurple.withOpacity(0.2),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit, color: Colors.blueAccent),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => EditProjectScreen(project: project))
+                          );
+                        },
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.redAccent),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => AlertDialog(
+                              title: const Text('Hapus Proyek?'),
+                              content: Text('Yakin ingin menghapus ${project.title}?'),
+                              actions: [
+                                TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Batal')),
+                                TextButton(
+                                  onPressed: () {
+                                    Provider.of<ProjectProvider>(context, listen: false).deleteProject(project.id!);
+                                    Navigator.pop(ctx); // Tutup dialog setelah berhasil dihapus
+                                  },
+                                  child: const Text('Hapus', style: TextStyle(color: Colors.redAccent)),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               );
