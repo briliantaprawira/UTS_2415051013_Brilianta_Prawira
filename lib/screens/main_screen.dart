@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'gallery_screen.dart';
+import 'project_list_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -11,9 +12,10 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
+  // Di sinilah kita mendaftarkan halaman yang akan ditampilkan saat menu diklik
   final List<Widget> _screens = [
     const GalleryScreen(),
-    const Center(child: Text('Halaman My Projects (CRUD Supabase) akan dibuat di sini', style: TextStyle(fontSize: 16))),
+    const ProjectListScreen(), // Halaman Supabase yang baru kita buat
   ];
 
   @override
